@@ -1,21 +1,5 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.core.Response;
-
 import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,6 +13,18 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.components.Project;
@@ -51,6 +47,10 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 /**
  * <b>1. Testing the generation of native code and the results of crosscompilers compiling that code<br>
@@ -411,7 +411,7 @@ public class CompilerWorkflowRobotCommonIT {
             builder.setToken(token).setLanguage(Language.ENGLISH);
             Project project = builder.build();
 
-            ProjectService.executeWorkflow(workflow, factory, project);
+            ProjectService.executeWorkflow(workflow, project);
             result =
                 project.hasSucceeded() || project.getResult() == Key.ROBOT_NOT_CONNECTED
                     ? (programXml.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS)
@@ -445,7 +445,7 @@ public class CompilerWorkflowRobotCommonIT {
             Project showSourceProject = builder.build();
 
             // Every robot needs at least a show source workflow
-            ProjectService.executeWorkflow("showsource", pluginMap.get(robotName), showSourceProject);
+            ProjectService.executeWorkflow("showsource", showSourceProject);
             sourceCode = showSourceProject.getSourceCode().toString();
             result = showSourceProject.hasSucceeded() ? (programXml.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS) : Result.FAILURE;
             reason = String.valueOf(showSourceProject.getResult());
